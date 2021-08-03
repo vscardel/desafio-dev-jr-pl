@@ -54,5 +54,5 @@ if __name__ == '__main__':
 	headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 	print('sending json')
 	r = requests.post(url, data=json.dumps(json_data), headers=headers)
-	print(r)
+	print(r.json())
 	print('request sended')

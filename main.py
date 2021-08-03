@@ -7,7 +7,7 @@ from app import app
 from db import mysql
 import json
 from graph import Graph
-from flask import Flask,request,Response
+from flask import Flask,request,Response,jsonify
 
 #default page for localhost:8080
 @app.route('/')
@@ -30,7 +30,8 @@ def save_graph():
 			new_id = cursor.lastrowid
 			conn.commit()
 			#payload
-			return Response("",status=201)
+			json_data['id'] = new_id
+			return jsonify(json_data),201
 		except:
 			#http server error
 			return Response("", status=500)
