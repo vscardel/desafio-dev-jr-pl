@@ -1,4 +1,5 @@
 from test_objects import graphs
+from graph import Graph
 import json
 import requests
 import unittest
@@ -66,6 +67,20 @@ class FlaskTestCase(unittest.TestCase):
 		response = requests.get(url,headers=headers)
 		json_response = response.json()
 		self.assertTrue(response.json()['id'])
+
+	#tests if find_all_routes returns 404 for graph not found
+	def test_find_all_routes_not_found(self):
+		url = "http://localhost:8080/routes/-1/from/A/to/B/?maxStops=10"
+		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+		response = requests.post(url,headers=headers)
+		self.assertEqual(response.status_code,404)
+
+	#tests return_graph_as_dict_of_neighbours() method on Graph	
+	def test_return_graph_as_dict_of_neighbours(self):
+		test_graph = graphs['test_graph_2']
+		my_graph = Graph(test_graph)
+		list_of_neighbours = my_graph.return_graph_as_dict_of_neighbours()
+		self.assertTrue(list_of_neighbours)
 
 
 if __name__ == '__main__':

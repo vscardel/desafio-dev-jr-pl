@@ -58,5 +58,17 @@ def retrieve_graph(graph_id):
 		return Response("",status=404)
 	conn.close()
 
+@app.route('''/routes/<int:graph_id>/from/<string:town1>/to/<string:town2>
+/?maxStops=<int:maxStops>''', methods = ['GET','POST'])
+
+def find_all_routes(graph_id,town1,town2,maxStops):
+	response = retrieve_graph(graph_id)
+	if response.status_code == 404:
+		return Response("",response.status_code)
+	#dict object
+	json_response = response.json()
+	graph = Graph(json_response)
+	
+	
 if __name__ == '__main__':
 	app.run(host="0.0.0.0",debug=True,port=8080)
