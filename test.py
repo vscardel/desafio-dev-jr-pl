@@ -59,6 +59,14 @@ class FlaskTestCase(unittest.TestCase):
 		response = requests.get(url,headers=headers)
 		self.assertEqual(response.status_code,404)
 
+	#tests if the payload ghave the id on it
+	def test_retrive_graph_id_on_payload(self):
+		url = "http://localhost:8080/graph/14"
+		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+		response = requests.get(url,headers=headers)
+		json_response = response.json()
+		self.assertTrue(response.json()['id'])
+
 
 if __name__ == '__main__':
 	unittest.main()

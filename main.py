@@ -50,8 +50,10 @@ def retrieve_graph(graph_id):
 	except:
 		return Response("",status=500)
 	graph = cursor.fetchone()
+	#graph[0] stores the id and graph[1] the json data
+	payload = {'id':graph[0], 'data':graph[1]}
 	if graph:
-		return jsonify(graph),200
+		return jsonify(payload),200
 	else:
 		return Response("",status=404)
 	conn.close()
