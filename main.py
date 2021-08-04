@@ -50,15 +50,15 @@ def retrieve_graph(graph_id):
 	except:
 		return Response("",status=500)
 	graph = cursor.fetchone()
-	#graph[0] stores the id and graph[1] the json data
 	if graph:
+		#graph[0] stores the id and graph[1] the json data
 		payload = {'id':graph[0], 'data':graph[1]}
 		return jsonify(payload),200
 	else:
 		return Response("",status=404)
 	conn.close()
 
-@app.route('''/routes/<int:graph_id>/from/<string:town1>/to/<string:town2>?maxStops=<int:maxStops>''', methods = ['GET','POST'])
+@app.route('''/routes/<int:graph_id>/from/<string:town1>/to/<string:town2>''', methods = ['GET','POST'])
 def find_all_routes(graph_id,town1,town2,maxStops):
 	response = retrieve_graph(graph_id)
 	if response.status_code == 404:

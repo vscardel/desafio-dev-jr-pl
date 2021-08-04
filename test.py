@@ -69,7 +69,7 @@ class FlaskTestCase(unittest.TestCase):
 
 	#tests if find_all_routes returns 404 for graph not found
 	def test_find_all_routes_not_found(self):
-		url = "http://localhost:8080/routes/453/from/A/to/B/?maxStops=10"
+		url = "http://localhost:8080/routes/453/from/A/to/B"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.post(url,headers=headers)
 		self.assertEqual(response.status_code,500)
