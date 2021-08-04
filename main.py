@@ -60,6 +60,7 @@ def retrieve_graph(graph_id):
 
 @app.route('''/routes/<int:graph_id>/from/<string:town1>/to/<string:town2>''', methods = ['GET','POST'])
 def find_all_routes(graph_id,town1,town2,maxStops):
+	maxStops = request.args.get("maxStops")
 	response = retrieve_graph(graph_id)
 	if response.status_code == 404:
 		#return 500 for testing purposes

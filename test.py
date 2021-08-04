@@ -74,6 +74,13 @@ class FlaskTestCase(unittest.TestCase):
 		response = requests.post(url,headers=headers)
 		self.assertEqual(response.status_code,500)
 
+	#testing url with maxStops parameter
+	def test_find_all_routes_not_found_with_maxStops(self):
+		url = "http://localhost:8080/routes/453/from/A/to/B?maxStops=10"
+		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+		response = requests.post(url,headers=headers)
+		self.assertEqual(response.status_code,500)
+
 	#tests return_graph_as_dict_of_neighbours() method on Graph	
 	def test_return_graph_as_dict_of_neighbours(self):
 		test_graph = graphs['test_graph_2']
