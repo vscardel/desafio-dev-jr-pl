@@ -54,13 +54,12 @@ class FlaskTestCase(unittest.TestCase):
 
 	#test if receive_graph returns 404 for non existing graph on db
 	def test_retrive_graph_graph_dont_exists(self):
-		#id -1 cannot exist on db
-		url = "http://localhost:8080/graph/-1"
+		url = "http://localhost:8080/graph/453"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.get(url,headers=headers)
 		self.assertEqual(response.status_code,404)
 
-	#tests if the payload ghave the id on it
+	#tests if the payload have the id on it
 	def test_retrive_graph_id_on_payload(self):
 		url = "http://localhost:8080/graph/14"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
@@ -70,10 +69,10 @@ class FlaskTestCase(unittest.TestCase):
 
 	#tests if find_all_routes returns 404 for graph not found
 	def test_find_all_routes_not_found(self):
-		url = "http://localhost:8080/routes/-1/from/A/to/B/?maxStops=10"
+		url = "http://localhost:8080/routes/453/from/A/to/B/?maxStops=10"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.post(url,headers=headers)
-		self.assertEqual(response.status_code,404)
+		self.assertEqual(response.status_code,500)
 
 	#tests return_graph_as_dict_of_neighbours() method on Graph	
 	def test_return_graph_as_dict_of_neighbours(self):
@@ -81,7 +80,6 @@ class FlaskTestCase(unittest.TestCase):
 		my_graph = Graph(test_graph)
 		list_of_neighbours = my_graph.return_graph_as_dict_of_neighbours()
 		self.assertTrue(list_of_neighbours)
-
 
 if __name__ == '__main__':
 	unittest.main()

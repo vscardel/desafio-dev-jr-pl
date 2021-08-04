@@ -51,24 +51,23 @@ def retrieve_graph(graph_id):
 		return Response("",status=500)
 	graph = cursor.fetchone()
 	#graph[0] stores the id and graph[1] the json data
-	payload = {'id':graph[0], 'data':graph[1]}
 	if graph:
+		payload = {'id':graph[0], 'data':graph[1]}
 		return jsonify(payload),200
 	else:
 		return Response("",status=404)
 	conn.close()
 
-@app.route('''/routes/<int:graph_id>/from/<string:town1>/to/<string:town2>
-/?maxStops=<int:maxStops>''', methods = ['GET','POST'])
-
+@app.route('''/routes/<int:graph_id>/from/<string:town1>/to/<string:town2>?maxStops=<int:maxStops>''', methods = ['GET','POST'])
 def find_all_routes(graph_id,town1,town2,maxStops):
 	response = retrieve_graph(graph_id)
 	if response.status_code == 404:
-		return Response("",response.status_code)
+		#return 500 for testing purposes
+		return Response("",status_code=500)
 	#dict object
 	json_response = response.json()
 	graph = Graph(json_response)
-	
+
 	
 if __name__ == '__main__':
 	app.run(host="0.0.0.0",debug=True,port=8080)

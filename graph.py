@@ -30,10 +30,3 @@ class Graph():
 	# def find_all_routes(self,town1,town2,maxStops):
 	# 	graph = self.structure['data']
 	# 	#tries to find the edge where town1 is the starting point
-		
-
-
-
-
-
-
