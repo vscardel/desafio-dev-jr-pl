@@ -52,23 +52,35 @@ def retrieve_graph(graph_id):
 	graph = cursor.fetchone()
 	if graph:
 		#graph[0] stores the id and graph[1] the json data
-		payload = {'id':graph[0], 'data':graph[1]}
+		json_string = json.loads(graph[1])
+		payload = {'id':graph[0], 'data':json_string['data']}
 		return jsonify(payload),200
 	else:
 		return Response("",status=404)
 	conn.close()
 
 @app.route('''/routes/<int:graph_id>/from/<string:town1>/to/<string:town2>''', methods = ['GET','POST'])
-def find_all_routes(graph_id,town1,town2,maxStops):
-	maxStops = request.args.get("maxStops")
-	response = retrieve_graph(graph_id)
+def find_all_routes(graph_id,town1,town2):
+	maxStops = int(request.args.get("maxStops"))
+	url_get_graph = "http://localhost:8080/graph/" + str(graph_id)
+	headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+	#response with graph
+	response = requests.get(url_get_graph,headers=headers)
 	if response.status_code == 404:
 		#return 500 for testing purposes
 		return Response("",status_code=500)
 	#dict object
 	json_response = response.json()
 	graph = Graph(json_response)
+	all_paths = graph.find_all_routes(town1,town2,maxStops)
+	#generate the response payload
+	payload = {"routes":[]}
+	for path in all_paths:
+		payload["routes"].append({
+				"route":''.join(path),
+				"stops":len(path)-1
+		})
+	return jsonify(payload),200
 
-	
 if __name__ == '__main__':
 	app.run(host="0.0.0.0",debug=True,port=8080)

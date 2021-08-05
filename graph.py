@@ -42,6 +42,7 @@ class Graph():
 		depht += 1
 		if curr_node == final_node:
 			if len(path) <= maxStops + 1:
+				#generate the answer
 				yield copy(path)
 		neighbours = graph[curr_node]
 		for neighbour in neighbours:

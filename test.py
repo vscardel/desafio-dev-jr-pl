@@ -99,5 +99,15 @@ class FlaskTestCase(unittest.TestCase):
 						['A', 'D', 'C'], 
 						['A', 'E', 'B', 'C']])
 
+	#test json response payload for test_graph_2
+	def test_find_all_routes_response(self):
+		url = "http://localhost:8080/routes/14/from/A/to/B?maxStops=10"
+		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+		response = requests.post(url, headers=headers)
+		self.assertEqual(response.json(),{'routes': 
+				[{'route': 'AB', 'stops': 1}, 
+				{'route': 'AEB', 'stops': 2}, 
+				{'route': 'AEDB', 'stops': 3}]})
+
 if __name__ == '__main__':
 	unittest.main()
