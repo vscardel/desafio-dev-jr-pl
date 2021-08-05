@@ -88,5 +88,16 @@ class FlaskTestCase(unittest.TestCase):
 		list_of_neighbours = my_graph.return_graph_as_dict_of_neighbours()
 		self.assertTrue(list_of_neighbours)
 
+	#test response for test_graph_2
+	def test_find_all_routes_response(self):
+		test_graph = graphs['test_graph_2']
+		my_graph = Graph(test_graph)
+		all_routes = my_graph.find_all_routes("A","C",3)
+		my_graph.flush()
+		self.assertEqual(all_routes,
+						[['A', 'B', 'C'], 
+						['A', 'D', 'C'], 
+						['A', 'E', 'B', 'C']])
+
 if __name__ == '__main__':
 	unittest.main()
