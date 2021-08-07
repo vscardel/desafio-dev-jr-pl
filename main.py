@@ -82,5 +82,22 @@ def find_all_routes(graph_id,town1,town2):
 		})
 	return jsonify(payload),200
 
+@app.route("/distance/<int:graph_id>/from/<string:town1>/to/<string:town2>")
+def find_min_distance(graph_id,town1,town2):
+	url_get_graph = "http://localhost:8080/graph/" + str(graph_id)
+	headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+	#response with graph
+	response = requests.get(url_get_graph,headers=headers)
+	if response.status_code == 404:
+		#return 500 for testing purposes
+		return Response("",status_code=500)
+	#dict object
+	json_response = response.json()
+	graph = Graph(json_response)
+	distance = graph.find_min_distance(town1,town2,maxStops)
+	#generate the response payload
+	payload = "dummy_payload"
+	return jsonify(payload),200
+
 if __name__ == '__main__':
 	app.run(host="0.0.0.0",debug=True,port=8080)

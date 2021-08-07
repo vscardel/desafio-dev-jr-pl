@@ -99,7 +99,7 @@ class FlaskTestCase(unittest.TestCase):
 						['A', 'D', 'C'], 
 						['A', 'E', 'B', 'C']])
 
-	#test json response payload for test_graph_2
+	#test json response payload for graph on db
 	def test_find_all_routes_response(self):
 		url = "http://localhost:8080/routes/14/from/A/to/B?maxStops=10"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
@@ -108,6 +108,19 @@ class FlaskTestCase(unittest.TestCase):
 				[{'route': 'AB', 'stops': 1}, 
 				{'route': 'AEB', 'stops': 2}, 
 				{'route': 'AEDB', 'stops': 3}]})
+
+	#tests return_graph_as_adjacency_matrix function
+	def test_return_graph_as_adjacency_matrix(self):
+		test_graph = graphs['test_graph_2']
+		my_graph = Graph(test_graph)
+		adjacency_matrix =  my_graph.return_graph_as_adjacency_matrix()
+		self.assertEqual(adjacency_matrix,
+			([[0, 5, 0, 5, 7], 
+			[0, 0, 4, 0, 0], 
+			[0, 0, 0, 8, 2], 
+			[0, 0, 8, 0, 6], 
+			[0, 3, 0, 0, 0]], 
+			{'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4}))
 
 if __name__ == '__main__':
 	unittest.main()

@@ -29,6 +29,38 @@ class Graph():
 												   edge['distance'])])
 		return dict_of_neighbours
 
+	#returns the representation as a adjacency matrix
+	#to map the original label of the vertex, the func-
+	#tion also returns a dict "node->number".
+	def return_graph_as_adjacency_matrix(self):
+		original_representation = self.structure['data']
+		vertex = {}
+		#get all vertices first
+		curr_num_vertice = 0
+		for edge in original_representation:
+			curr_vertice_1 = edge['source']
+			curr_vertice_2 = edge['target']
+			if curr_vertice_1 not in vertex:
+				vertex[curr_vertice_1] = curr_num_vertice
+				curr_num_vertice += 1
+			if curr_vertice_2 not in vertex:
+				vertex[curr_vertice_2] = curr_num_vertice
+				curr_num_vertice += 1
+
+		#matrix with initial distances set to 0
+		adjacency_matrix = [[0 for column in range(len(vertex))]
+			for row in range(len(vertex))]
+
+		#second pass to update the adjacency matrix
+		for edge in original_representation:
+			curr_vertice_1 = edge['source']
+			curr_vertice_2 = edge['target']
+			position_i = vertex[curr_vertice_1]
+			position_j = vertex[curr_vertice_2]
+			adjacency_matrix[position_i][position_j] = edge['distance']
+
+		return adjacency_matrix,vertex
+
 	#dfs for find_all_routes
 	def dfs_find_all_routes(
 		self,
@@ -64,6 +96,10 @@ class Graph():
 		all_paths = list(self.dfs_find_all_routes(
 		graph,town1,town2,path,initial_stop,maxStops))
 		return all_paths
+
+	#djikstra algorithm to find min route
+	def find_min_distance(self):
+		graph = self.return_graph_as_dict_of_neighbours()
 
 	def flush(self):
 		self.visited = {}
