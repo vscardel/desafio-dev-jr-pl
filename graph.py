@@ -25,8 +25,8 @@ class Graph():
 				dict_of_neighbours[current_source] = [(edge['target'],
 												   edge['distance'])]
 			else:
-				dict_of_neighbours[current_source].append([(edge['target'],
-												   edge['distance'])])
+				dict_of_neighbours[current_source].append((edge['target'],
+												   edge['distance']))
 		return dict_of_neighbours
 
 	#returns the representation as a adjacency matrix
@@ -137,7 +137,23 @@ class Graph():
 	#find the path with min distance
 	def find_min_distance_with_path(self,src,target):
 		all_paths = self.find_all_routes(src,target,float("inf"))
-		return all_paths
+		min_distance = self.find_min_distance(src,target)
+		graph = self.return_graph_as_dict_of_neighbours()
+		#determines if path is the min path
+		min_path = None
+		for path in all_paths:
+			summ = 0
+			for i in range(1,len(path)):
+				source = path[i-1]
+				target = path[i]
+				for vertex in graph[source]:
+					if vertex[0] == target:
+						summ += vertex[1]
+						break
+
+			if summ == min_distance:
+				min_path = path
+		return min_path,min_distance
 
 	def flush(self):
 		self.visited = {}

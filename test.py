@@ -134,8 +134,8 @@ class FlaskTestCase(unittest.TestCase):
 	def test_min_distance(self):
 		test_graph = graphs['test_graph_1']
 		my_graph = Graph(test_graph)
-		all_paths = my_graph.find_min_distance_with_path("A","C")
-		print(all_paths)
-
+		min_path,min_distance = my_graph.find_min_distance_with_path("A","C")
+		self.assertEqual((min_path,min_distance),(['A','B','C'],8))
+	
 if __name__ == '__main__':
 	unittest.main()
