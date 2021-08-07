@@ -97,9 +97,47 @@ class Graph():
 		graph,town1,town2,path,initial_stop,maxStops))
 		return all_paths
 
-	#djikstra algorithm to find min route
-	def find_min_distance(self):
-		graph = self.return_graph_as_dict_of_neighbours()
+	#find vertex that is not on sptSet and have
+	#the minimum distance from curr_vertex
+	def minDistance(self, dist, sptSet,vertex):
+		min = float("inf")
+		for v in range(len(vertex)):
+			if dist[v] < min and sptSet[v] == False:
+				min = dist[v]
+				min_index = v
+		return min_index
+
+	def dijkstra(self,num_src,vertex,adjacency_matrix):
+		#initial distances are +inf
+		dist = [float('inf')] * len(vertex)
+		#initial vertx distance is 0
+		dist[num_src] = 0
+		sptSet = [False] * len(vertex)
+		for cout in range(len(vertex)):
+			#vertex with minimun distance not yet
+			#processed
+			u = self.minDistance(dist, sptSet,vertex)
+			#vertex now processed
+			sptSet[u] = True
+			#update the distances
+			for v in range(len(vertex)):
+				if adjacency_matrix[u][v] > 0 and sptSet[v] == False and \
+				dist[v] > dist[u] + adjacency_matrix[u][v]:
+					dist[v] = dist[u] + adjacency_matrix[u][v]
+		return dist
+
+
+	#uses dijikstra algorithm to find min route
+	def find_min_distance(self,src,target):
+		adjacency_matrix,vertex = self.return_graph_as_adjacency_matrix()
+		num_src = vertex[src]
+		dists = self.dijkstra(num_src,vertex,adjacency_matrix)
+		return dists[vertex[target]]
+
+	#find the path with min distance
+	def find_min_distance_with_path(self,src,target):
+		all_paths = self.find_all_routes(src,target,float("inf"))
+		return all_paths
 
 	def flush(self):
 		self.visited = {}

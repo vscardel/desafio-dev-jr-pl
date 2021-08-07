@@ -122,5 +122,20 @@ class FlaskTestCase(unittest.TestCase):
 			[0, 3, 0, 0, 0]], 
 			{'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4}))
 
+	#test find_min_distance function
+	def test_min_distance(self):
+		test_graph = graphs['test_graph_1']
+		my_graph = Graph(test_graph)
+		adjacency_matrix =  my_graph.return_graph_as_adjacency_matrix()
+		min_dist = my_graph.find_min_distance("A","C")
+		self.assertEqual(min_dist,8)
+
+	#test find_min_distance_with_path function
+	def test_min_distance(self):
+		test_graph = graphs['test_graph_1']
+		my_graph = Graph(test_graph)
+		all_paths = my_graph.find_min_distance_with_path("A","C")
+		print(all_paths)
+
 if __name__ == '__main__':
 	unittest.main()

@@ -94,6 +94,8 @@ def find_min_distance(graph_id,town1,town2):
 	#dict object
 	json_response = response.json()
 	graph = Graph(json_response)
+	if not maxStops:
+		maxStops = float("inf")
 	distance = graph.find_min_distance(town1,town2,maxStops)
 	#generate the response payload
 	payload = "dummy_payload"
