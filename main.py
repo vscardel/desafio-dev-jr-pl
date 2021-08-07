@@ -61,7 +61,11 @@ def retrieve_graph(graph_id):
 
 @app.route('''/routes/<int:graph_id>/from/<string:town1>/to/<string:town2>''', methods = ['GET','POST'])
 def find_all_routes(graph_id,town1,town2):
-	maxStops = int(request.args.get("maxStops"))
+	maxStops = request.args.get("maxStops")
+	if not maxStops:
+		maxStops = float("inf")
+	else:
+		maxStops = int(maxStops)
 	url_get_graph = "http://localhost:8080/graph/" + str(graph_id)
 	headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 	#response with graph
@@ -84,22 +88,6 @@ def find_all_routes(graph_id,town1,town2):
 
 @app.route("/distance/<int:graph_id>/from/<string:town1>/to/<string:town2>")
 def find_min_distance(graph_id,town1,town2):
-	url_get_graph = "http://localhost:8080/graph/" + str(graph_id)
-	headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-	#response with graph
-	response = requests.get(url_get_graph,headers=headers)
-	if response.status_code == 404:
-		#return 500 for testing purposes
-		return Response("",status_code=500)
-	#dict object
-	json_response = response.json()
-	graph = Graph(json_response)
-	if not maxStops:
-		maxStops = float("inf")
-	distance = graph.find_min_distance(town1,town2,maxStops)
-	#generate the response payload
-	payload = "dummy_payload"
-	return jsonify(payload),200
-
+	pass
 if __name__ == '__main__':
 	app.run(host="0.0.0.0",debug=True,port=8080)

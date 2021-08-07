@@ -109,6 +109,13 @@ class FlaskTestCase(unittest.TestCase):
 				{'route': 'AEB', 'stops': 2}, 
 				{'route': 'AEDB', 'stops': 3}]})
 
+	#test json response payload for graph on db without maxStop
+	def test_find_all_routes_response(self):
+		url = "http://localhost:8080/routes/14/from/A/to/C"
+		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+		response = requests.post(url, headers=headers)
+		self.assertTrue(response.json())
+
 	#tests return_graph_as_adjacency_matrix function
 	def test_return_graph_as_adjacency_matrix(self):
 		test_graph = graphs['test_graph_2']
@@ -136,6 +143,6 @@ class FlaskTestCase(unittest.TestCase):
 		my_graph = Graph(test_graph)
 		min_path,min_distance = my_graph.find_min_distance_with_path("A","C")
 		self.assertEqual((min_path,min_distance),(['A','B','C'],8))
-	
+
 if __name__ == '__main__':
 	unittest.main()
