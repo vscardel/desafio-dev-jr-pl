@@ -138,11 +138,18 @@ class FlaskTestCase(unittest.TestCase):
 		self.assertEqual(min_dist,8)
 
 	#test find_min_distance_with_path function
-	def test_min_distance(self):
+	def test_min_distance_with_path(self):
 		test_graph = graphs['test_graph_1']
 		my_graph = Graph(test_graph)
 		min_path,min_distance = my_graph.find_min_distance_with_path("A","C")
 		self.assertEqual((min_path,min_distance),(['A','B','C'],8))
+
+	#test find_min_distance with a json request to a saved graph
+	def test_request_min_distance(self):
+		url = "http://localhost:8080/distance/14/from/A/to/C"
+		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+		response = requests.post(url, headers=headers)
+		self.assertEqual(response.json(),{'distance': 8, 'path': ['A', 'B', 'C']})
 
 if __name__ == '__main__':
 	unittest.main()
