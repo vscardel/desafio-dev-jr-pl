@@ -27,6 +27,7 @@ class FlaskTestCase(unittest.TestCase):
 			data=json.dumps(test_graph), 
 			headers=headers)
 		self.assertTrue(response.json()['id'])
+		return response
 
 	#tests if storing returns the code 400 for an empty graph
 	def test_save_graph_bad_request(self):
@@ -40,28 +41,31 @@ class FlaskTestCase(unittest.TestCase):
 
 	#test if the response code for an existing graph is 200
 	def test_retrieve_graph_sucessfull_response_code(self):
-		url = "http://localhost:8080/graph/14"
+		response_get_graph = self.test_save_graph_sucessfull_payload() 
+		url = "http://localhost:8080/graph/"+str(response_get_graph.json()['id'])
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.get(url,headers=headers)
 		self.assertEqual(response.status_code,200)
 
 	#tests if the json graph is returned by retrieve_graph
 	def test_retrieve_graph_returns_json_response(self):
-		url = "http://localhost:8080/graph/14"
+		response_get_graph = self.test_save_graph_sucessfull_payload() 
+		url = "http://localhost:8080/graph/"+str(response_get_graph.json()['id'])
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.get(url,headers=headers)
 		self.assertTrue(response.json())
 
 	#test if receive_graph returns 404 for non existing graph on db
 	def test_retrive_graph_graph_dont_exists(self):
-		url = "http://localhost:8080/graph/453"
+		url = "http://localhost:8080/graph/0"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.get(url,headers=headers)
 		self.assertEqual(response.status_code,404)
 
 	#tests if the payload have the id on it
 	def test_retrive_graph_id_on_payload(self):
-		url = "http://localhost:8080/graph/14"
+		response_get_graph = self.test_save_graph_sucessfull_payload() 
+		url = "http://localhost:8080/graph/"+str(response_get_graph.json()['id'])
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.get(url,headers=headers)
 		json_response = response.json()
@@ -69,14 +73,14 @@ class FlaskTestCase(unittest.TestCase):
 
 	#tests if find_all_routes returns 404 for graph not found
 	def test_find_all_routes_not_found(self):
-		url = "http://localhost:8080/routes/453/from/A/to/B"
+		url = "http://localhost:8080/routes/0/from/A/to/B"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.post(url,headers=headers)
 		self.assertEqual(response.status_code,500)
 
 	#testing url with maxStops parameter
 	def test_find_all_routes_not_found_with_maxStops(self):
-		url = "http://localhost:8080/routes/453/from/A/to/B?maxStops=10"
+		url = "http://localhost:8080/routes/0/from/A/to/B?maxStops=10"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.post(url,headers=headers)
 		self.assertEqual(response.status_code,500)
@@ -111,7 +115,8 @@ class FlaskTestCase(unittest.TestCase):
 
 	#test json response payload for graph on db without maxStop
 	def test_find_all_routes_response(self):
-		url = "http://localhost:8080/routes/14/from/A/to/C"
+		response_get_graph = self.test_save_graph_sucessfull_payload() 
+		url = "http://localhost:8080/routes/"+str(response_get_graph.json()['id'])+"/from/A/to/C"
 		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 		response = requests.post(url, headers=headers)
 		self.assertTrue(response.json())
@@ -146,10 +151,11 @@ class FlaskTestCase(unittest.TestCase):
 
 	#test find_min_distance with a json request to a saved graph
 	def test_request_min_distance(self):
-		url = "http://localhost:8080/distance/14/from/A/to/C"
-		headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-		response = requests.post(url, headers=headers)
-		self.assertEqual(response.json(),{'distance': 8, 'path': ['A', 'B', 'C']})
+		url = "http://localhost:8080/routes/14/from/A/to/C"
+		test_graph = graphs['test_graph_1']
+		my_graph = Graph(test_graph)
+		min_path,min_distance = my_graph.find_min_distance_with_path("A","C")
+		self.assertEqual((min_path,min_distance),(['A','B','C'],8))
 
 if __name__ == '__main__':
 	unittest.main()
