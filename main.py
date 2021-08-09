@@ -73,7 +73,7 @@ def find_all_routes(graph_id,town1,town2):
 	response = requests.get(url_get_graph,headers=headers)
 	if response.status_code == 404:
 		#return 500 for testing purposes
-		return Response("",status_code=500)
+		return Response("",status=500)
 	#dict object
 	json_response = response.json()
 	graph = Graph(json_response)

@@ -2,17 +2,17 @@ FROM python:3.8
 
 EXPOSE 8080
 
-WORKDIR /TransportAPI
+WORKDIR /desafio-dev-jr-pl
 
-COPY requirements.txt /TransportAPI
+COPY requirements.txt /desafio-dev-jr-pl
 
 RUN pip3 install -r requirements.txt
 
-COPY test.py /TransportAPI
-COPY test_objects.py /TransportAPI
-COPY graph.py /TransportAPI
-COPY db.py /TransportAPI
-COPY app.py /TransportAPI
-COPY main.py /TransportAPI
+COPY test.py /desafio-dev-jr-pl
+COPY test_objects.py /desafio-dev-jr-pl
+COPY graph.py /desafio-dev-jr-pl
+COPY app.py /desafio-dev-jr-pl
+COPY db.py /desafio-dev-jr-pl
+COPY main.py /desafio-dev-jr-pl
 
 CMD python3 main.py
